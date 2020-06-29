@@ -1,4 +1,5 @@
 #include <MIDI_controls.hpp>
+
 USBMIDI_CREATE_DEFAULT_INSTANCE();
 
 void setup_midi()
@@ -11,12 +12,12 @@ void loop_midi()
     MIDI.read();
 }
 
-void send_button_press(){
-    MIDI.sendNoteOn(42, 127, MY_MIDI_CH);
+void send_button_press(button_midi pressed, int velocity){
+    int note = pressed.midi_note;
+    MIDI.sendNoteOn(note, velocity, MY_MIDI_CH);
 }
-
 void send_button_toggle(){
-    
+
 }
 
 void send_state_change(){

@@ -1,5 +1,6 @@
 #include <MIDI_controls.hpp>
 #include <button.hpp>
+#include <7seg.hpp>
 /*
 TO DO:
 HW:
@@ -22,6 +23,7 @@ void setup(){
   // Serial.begin(9600);
   setup_midi();
   setup_buttons();
+  // setup_7seg();
 }
 void loop(){
   loop_buttons();
@@ -32,5 +34,6 @@ void loop(){
       send_button_press(midi_buttons[push_buttons[i].midi_index], velocity);
     }
   }
+  // loop_7seg();
   loop_midi();
 }

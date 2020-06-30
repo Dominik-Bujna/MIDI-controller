@@ -1,29 +1,55 @@
 #include <button.hpp>
 
-push_button push_buttons[MAX_PUSH_BUTTONS] = {
-    {0, 100, PLAY, 1, false, 0},
-    {0, 100, CUE, 1, false, 1},
-};
-
-
-void setup_buttons(){
-    for(int i = 0; i < MAX_PUSH_BUTTONS; i++){
-        pinMode(push_buttons[i].pin, INPUT_PULLUP);
-    }
+PushButton::PushButton(int pin_n)
+{
+    pin = pin_n;
+    cooldown = 100;
+    last_pressed = 0;
+    last_state = 1;
+    changed = 0;
 }
-void loop_buttons(){
-    for(int i=0; i < MAX_PUSH_BUTTONS; i++){
-        int state = digitalRead(push_buttons[i].pin);
-        if(state != push_buttons[i].last_state){
-            if(!push_buttons[i].changed){
-                int time = millis();
-                if(time - push_buttons[i].last_pressed > push_buttons[i].cooldown){
-                    push_buttons[i].last_state = state;
-                    //this flag is set back after the change of the button has been sent
-                    push_buttons[i].changed = true;
-                    push_buttons[i].last_pressed = time;
-                }
-            }   
+
+PushButton::PushButton(int pin_n, int cooldown_ms)
+{
+    pin = pin_n;
+    cooldown = cooldown_ms;
+    last_pressed = 0;
+    last_state = 1;
+    changed = 0;
+}
+PushButton::~PushButton(){};
+int PushButton::get_value()
+{
+    return last_state;
+}
+
+void PushButton::read_value()
+{
+    int state = digitalRead(pin);
+    if (state != last_state)
+    {
+        if (!changed)
+        {
+            int time = millis();
+            if (time - last_pressed > cooldown)
+            {
+
+                Serial.print("pin: ");
+                Serial.print(pin);
+                Serial.print(" state: ");
+                Serial.println(state);
+
+                last_state = state;
+                //this flag is set back after the change of the button has been sent
+                changed = true;
+                last_pressed = time;
+            }
         }
     }
+}
+
+void PushButton::setup()
+{
+    pinMode(pin, INPUT_PULLUP);
+    digitalWrite(pin, HIGH);
 }

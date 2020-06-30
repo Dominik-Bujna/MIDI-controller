@@ -1,17 +1,20 @@
 #include <pinmap.hpp>
+#include <control_element.hpp>
 
-const int MAX_PUSH_BUTTONS = 2;
-struct push_button{
+class PushButton : public ControlElement
+{
+
+public:
+    PushButton(int pin_n);
+    PushButton(int pin_n, int cooldown_ms);
+    ~PushButton();
+    virtual void read_value();
+    virtual int get_value();
+    virtual void setup();
+
+private:
     int last_pressed;
     int cooldown;
-    int pin;
     int last_state;
-    //set true by loop that reads the inputs, reset to false by loop that processes the input
-    bool changed;
-    int midi_index;
+    int pin;
 };
-
-extern push_button push_buttons[MAX_PUSH_BUTTONS];
-
-void setup_buttons();
-void loop_buttons();

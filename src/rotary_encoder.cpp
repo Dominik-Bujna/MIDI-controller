@@ -23,23 +23,16 @@ void RotaryEncoder::read_value()
   // last_state = state_1;
   read_1();
   read_2();
-  if (changed)
-  {
-    Serial.print("position: ");
-    Serial.println(position);
-  }
 }
 int RotaryEncoder::get_value()
 {
-  return position;
+  return position%127;
 }
 
 void RotaryEncoder::setup()
 {
   pinMode(pin_1, INPUT);
   pinMode(pin_2, INPUT);
-  digitalWrite(pin_1, LOW);
-  digitalWrite(pin_2, LOW);
 }
 
 void RotaryEncoder::read_1()

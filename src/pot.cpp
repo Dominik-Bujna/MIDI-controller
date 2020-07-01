@@ -5,7 +5,7 @@ Pot::Pot(int pin_n)
     pin = pin_n;
     last_state = 0;
     changed = false;
-    tolerance = 4;
+    tolerance = 8;
     cooldown = 10;
 }
 
@@ -26,11 +26,6 @@ void Pot::read_value()
                 if (abs(last_state - state) > tolerance)
                 {
                     last_state = state;
-                    Serial.print("pin: ");
-                    Serial.print(pin);
-                    Serial.print(" value: ");
-                    Serial.println(last_state);
-                    // delay(500);
                     //this flag is set back after the change of has been sent
                     changed = true;
                     last_updated = time;

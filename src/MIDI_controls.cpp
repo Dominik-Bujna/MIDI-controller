@@ -12,8 +12,7 @@ void loop_midi()
     MIDI.read();
 }
 
-void send_button_press(button_midi pressed, int velocity){
-    int note = pressed.midi_note;
+void send_button_press(int note, int velocity){
     MIDI.sendNoteOn(note, velocity, MY_MIDI_CH);
 }
 void send_button_toggle(){

@@ -20,7 +20,11 @@ PushButton::PushButton(int pin_n, int cooldown_ms)
 PushButton::~PushButton(){};
 int PushButton::get_value()
 {
-    return last_state;
+    if(last_state == LOW){
+        return 127;
+    }else{
+        return 0;
+    }
 }
 
 void PushButton::read_value()
@@ -33,12 +37,6 @@ void PushButton::read_value()
             int time = millis();
             if (time - last_pressed > cooldown)
             {
-
-                Serial.print("pin: ");
-                Serial.print(pin);
-                Serial.print(" state: ");
-                Serial.println(state);
-
                 last_state = state;
                 //this flag is set back after the change of the button has been sent
                 changed = true;

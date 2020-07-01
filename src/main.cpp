@@ -32,6 +32,7 @@ ControlElement *controls[controls_size];
 
 void setup()
 {
+  // setup_midi();
   Serial.begin(9600);
   PushButton a = PushButton(buttons[0]);
   a.setup();
@@ -69,13 +70,12 @@ void loop()
     if (controls[i]->changed)
     {
       int v = controls[i]->get_value();
+      Serial.print(i);
+      Serial.print(" : ");
       Serial.println(v);
+      // send_button_press(i+60, v);
+      delay(100);
       controls[i]->changed = false;
-    }
-    else
-    {
-      // Serial.println("no change");
-      // delay(500);
     }
   }
   // loop_midi();

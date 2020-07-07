@@ -1,12 +1,13 @@
 #include <Arduino.h>
+#include <control_element.hpp>
 class Multiplexer
 {
-
-    int pin_A;
-    int pin_B;
-    int pin_C;
-    int pin_IO;
-
+public:
+    const int pin_A;
+    const int pin_B;
+    const int pin_C;
+    const int pin_IO;
+    ControlElement * pins[];
     //updates all of the I/Os
     void update();
 

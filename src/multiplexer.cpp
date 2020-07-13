@@ -1,5 +1,12 @@
 #include <multiplexer.hpp>
 
+
+Multiplexer::Multiplexer(){
+    // for(int i = 0; i < pins_length; i++){
+    //     pin_addresses[i] = -1;
+    // }
+}
+
 //updates all of the I/Os
 void Multiplexer::update()
 {   
@@ -18,4 +25,8 @@ void Multiplexer::setup()
     pinMode(pin_B, OUTPUT);
     pinMode(pin_C, OUTPUT);
     pinMode(pin_IO, INPUT);
+}
+
+void Multiplexer::assign_pin(int pin_n, ControlElement * pin){
+    pins[pin_n] = pin;
 }

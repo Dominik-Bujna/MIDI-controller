@@ -26,7 +26,7 @@ void RotaryEncoder::read_value()
 }
 int RotaryEncoder::get_value()
 {
-  return position%127;
+  return position;
 }
 
 void RotaryEncoder::setup()

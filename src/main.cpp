@@ -2,6 +2,7 @@
 #include <button.hpp>
 #include <rotary_encoder.hpp>
 #include <pot.hpp>
+#include <multiplexer.hpp>
 
 /*
 /dev/cu.usbmodemMIDI1
@@ -28,14 +29,16 @@ int valB = 0;
 int valC = 0;
 PushButton button = PushButton(5);
 RotaryEncoder enc = RotaryEncoder(5, 5);
+Multiplexer mult = Multiplexer(2, 3, 4, 5);
 void setup()
 {
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  // pinMode(A0, INPUT_PULLUP);
-  pinMode(5, INPUT);
 
+  // pinMode(2, OUTPUT);
+  // pinMode(3, OUTPUT);
+  // pinMode(4, OUTPUT);
+  // // pinMode(A0, INPUT_PULLUP);
+  // pinMode(5, INPUT);
+  mult.setup();
   Serial.begin(9600);
   // setup_midi();
   // Serial.begin(9600);
@@ -43,53 +46,16 @@ void setup()
   // for(int i = 0; i < 6; i++){
   //   c[i]->setup();
   // }
+  mult.assign_pin(0, enc.read_1);
+  mult.assign_pin(1, button.read_value);
+  mult.assign_pin(2, enc.read_2);
 }
 
 void loop()
 {
-  digitalWrite(2, LOW);
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-
-  // valA = analogRead(A0);
-  enc.read_1();
-  valA = digitalRead(5);
-
-  digitalWrite(2, LOW);
-  digitalWrite(3, LOW);
-  digitalWrite(4, HIGH);
-
-  // valB = analogRead(A0);
-  button.read_value();
-  valB = digitalRead(5);
-
-  digitalWrite(2, LOW);
-  digitalWrite(3, HIGH);
-  digitalWrite(4, LOW);
-
-  // valC = analogRead(A0);
-  enc.read_2();
-  valC = digitalRead(5);
-
-  valC = digitalRead(5);
-  if(button.changed){
-
-    Serial.println(button.get_value());
-    button.changed = false;
-    // delay(100);
-  }
-  if(enc.changed){
-
-    Serial.println(enc.get_value());
-    enc.changed = false;
-  }
-  // Serial.println(valA);
-  // Serial.println(valB);
-  // Serial.println(valC);
-  // Serial.println();
-  // Serial.println();
-
-  // delay(100);
+  
+  mult.update();
+  delay(100);
 
   // for(int i = 0; i < 6; i++){
   //   c[i]->read_value();

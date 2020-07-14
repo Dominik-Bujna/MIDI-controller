@@ -10,6 +10,7 @@ public:
     int pin_C;
     int pin_IO;
     static const int pins_length = 8;
+    void (* read [pins_length])();
     ControlElement * pins[pins_length];
     int pin_addresses[pins_length];
     
@@ -18,5 +19,5 @@ public:
 
     void setup();
 
-    void assign_pin(int pin_n, ControlElement * pin);
+    void assign_pin(int pin_n, void (*read_func)());
 };

@@ -19,9 +19,9 @@ void Multiplexer::update()
 {
     for (int i = 0b000; i <= 0b111; i++)
     {
-        digitalWrite(pin_A, (i & 1 << 0));
+        digitalWrite(pin_A, (i & 1 << 2));
         digitalWrite(pin_B, (i & 1 << 1));
-        digitalWrite(pin_C, (i & 1 << 2));
+        digitalWrite(pin_C, (i & 1 << 0));
         if(pins[i]!= NULL){
             pins[i]->read_value();
         }

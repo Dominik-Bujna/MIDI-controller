@@ -4,6 +4,8 @@
 #include <rotary_encoder_pin.hpp>
 #include <pot.hpp>
 #include <multiplexer.hpp>
+#include <leds.hpp>
+
 
 /*
 /dev/cu.usbmodemMIDI1
@@ -41,11 +43,13 @@ void setup()
   mult.assign_pin(0, &enc_1);
   mult.assign_pin(1, &button);
   mult.assign_pin(2, &enc_2);
+  led_setup();
 }
 
 void loop()
 {
   mult.update();
+  led_loop();
   // delay(100);
   if(button.changed){
     int v = button.get_value();
@@ -57,4 +61,5 @@ void loop()
     Serial.println(v);
     enc.changed = false;
   }
+
 }

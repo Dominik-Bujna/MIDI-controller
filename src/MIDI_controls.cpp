@@ -1,3 +1,4 @@
+#if USE_MIDIUSB == 1
 #include <MIDI_controls.hpp>
 
 USBMIDI_CREATE_DEFAULT_INSTANCE();
@@ -22,3 +23,4 @@ void send_button_toggle(){
 void send_state_change(){
 
 }
+#endif

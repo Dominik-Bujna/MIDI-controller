@@ -1,4 +1,9 @@
+
+#if USE_MIDIUSB == 1
 #include <MIDI_controls.hpp>
+#endif
+
+
 #include <button.hpp>
 #include <rotary_encoder.hpp>
 #include <pot.hpp>
@@ -25,7 +30,11 @@ ControlElement *c [6] = {new PushButton(7), new PushButton(6), new Pot(A0), new 
 PushButton a = PushButton(7);
 void setup()
 {
+
+  #if USE_MIDIUSB == 1
   setup_midi();
+  #endif
+
   Serial.begin(9600);
   a.setup();
   for(int i = 0; i < 6; i++){
@@ -43,8 +52,13 @@ void loop()
       Serial.print(" : ");
       Serial.println(v);
       c[i]->changed = false;
+      #if USE_MIDIUSB == 1
       send_button_press(60+i, v);
+      #endif
     }
   }
+
+  #if USE_MIDIUSB == 1
   loop_midi();
+  #endif
 }

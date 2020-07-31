@@ -1,3 +1,4 @@
+#pragma once
 #include <pinmap.hpp>
 #include <control_element.hpp>
 

@@ -22,6 +22,9 @@ int RotaryEncoderPinA::get_value(){
 void RotaryEncoderPinA::setup(){
 
 }
+bool RotaryEncoderPinA::is_encoder(){
+    return true;
+}
 RotaryEncoderPinB::RotaryEncoderPinB(RotaryEncoder *enc)
 {
     encoder = enc;

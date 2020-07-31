@@ -43,3 +43,7 @@ void Pot::setup()
     pinMode(pin, INPUT);
     // analogWrite(pin, 0);
 }
+
+bool Pot::is_pot(){
+    return true;
+}

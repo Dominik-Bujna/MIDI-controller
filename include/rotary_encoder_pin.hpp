@@ -10,6 +10,7 @@ public:
     virtual void read_value();
     virtual int get_value();
     virtual void setup();
+    virtual bool is_encoder();
 
 private:
     RotaryEncoder *encoder;

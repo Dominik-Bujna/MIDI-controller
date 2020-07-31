@@ -77,9 +77,10 @@ void loop()
         int v = mult.pins[i]->get_value();
         Serial.println(v);
         #if USE_MIDIUSB == 1
-        send_button_press(60 + i, v);
+        process_midi_out(mult.pins[i], 60 + i, v);
+        // send_button_press(60 + i, v);
         #endif
-        mult.pins[i]->changed = false;
+        // mult.pins[i]->changed = false;
       }
     }
   }

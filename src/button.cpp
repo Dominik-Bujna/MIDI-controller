@@ -51,3 +51,7 @@ void PushButton::setup()
     pinMode(pin, INPUT_PULLUP);
     digitalWrite(pin, HIGH);
 }
+
+bool PushButton::is_button(){
+    return true;
+}

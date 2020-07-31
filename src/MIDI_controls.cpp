@@ -23,4 +23,14 @@ void send_button_toggle(){
 void send_state_change(){
 
 }
+void process_midi_out(ControlElement * e, int note, int value){
+    if(e->is_button()){
+        MIDI.sendNoteOn(note, e->get_value(), MY_MIDI_CH);
+        e->changed = false;
+    }
+    if(e->is_encoder() || e->is_pot()){
+        MIDI.sendControlChange(note, e->get_value(), MY_MIDI_CH);
+        e->changed = false;
+    }
+}
 #endif

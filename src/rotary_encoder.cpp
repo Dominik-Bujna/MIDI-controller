@@ -26,7 +26,7 @@ void RotaryEncoder::read_value()
 }
 int RotaryEncoder::get_value()
 {
-  return position;
+  return (unsigned int) position % 128;
 }
 
 void RotaryEncoder::setup()
@@ -58,4 +58,7 @@ void RotaryEncoder::read_2()
       position++;
     }
   }
+}
+bool RotaryEncoder::is_encoder(){
+  return true;
 }

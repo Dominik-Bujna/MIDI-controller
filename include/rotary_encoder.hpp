@@ -10,6 +10,7 @@ public:
     virtual void read_value();
     virtual int get_value();
     virtual void setup();
+    virtual bool is_encoder();
     void read_1();
     void read_2();
     //pin 1 always has to preceed pin 2 when connected to multiplexer

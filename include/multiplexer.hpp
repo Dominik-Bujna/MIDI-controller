@@ -16,5 +16,6 @@ public:
     //updates all of the I/Os
     void update();
     void setup();
+    void setup_pullup();
     void assign_pin(int pin_n, ControlElement * pin);
 };

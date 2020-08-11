@@ -32,6 +32,13 @@ void Multiplexer::setup()
     pinMode(pin_A, OUTPUT);
     pinMode(pin_B, OUTPUT);
     pinMode(pin_C, OUTPUT);
+    pinMode(pin_IO, INPUT);
+}
+void Multiplexer::setup_pullup()
+{
+    pinMode(pin_A, OUTPUT);
+    pinMode(pin_B, OUTPUT);
+    pinMode(pin_C, OUTPUT);
     pinMode(pin_IO, INPUT_PULLUP);
 }
 

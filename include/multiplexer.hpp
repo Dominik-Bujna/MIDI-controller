@@ -17,5 +17,7 @@ public:
     void update();
     void setup();
     void setup_pullup();
+    void setup_output();
+    void cycle();
     void assign_pin(int pin_n, ControlElement * pin);
 };

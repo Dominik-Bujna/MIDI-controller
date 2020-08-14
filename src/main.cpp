@@ -10,6 +10,7 @@
 #include <pot.hpp>
 #include <multiplexer.hpp>
 
+
 /*
 /dev/cu.usbmodemMIDI1
 TO DO:
@@ -31,65 +32,45 @@ SW:
 
 
 
-int mult1IO = 13;
-int mult1A = 12;
-int mult1B = 11;
-int mult1C = 10;
 
-int mult2IO = A0;
-int mult2A = A3;
-int mult2B = A2;
-int mult2C = A1;
+int mult1IO = 12;
+int mult1A = 9;
+int mult1B= 10;
+int mult1C = 11;
 
-int mult3IO = 5;
-int mult3A = 2;
-int mult3B = 3;
-int mult3C = 4;
+int mult2IO = 8;
+int mult2A = 5;
+int mult2B = 6;
+int mult2C = 7;
 
-int mult4IO = 9;
-int mult4A = 6;
-int mult4B = 7;
-int mult4C = 8;
+
+Pot p1 = Pot(A0);
+Pot p2 = Pot(A3);
+Pot p3 = Pot(A4);
 
 Multiplexer mult1 = Multiplexer(mult1A, mult1B, mult1C, mult1IO);
 Multiplexer mult2 = Multiplexer(mult2A, mult2B, mult2C, mult2IO);
-Multiplexer mult3 = Multiplexer(mult3A, mult3B, mult3C, mult3IO);
-Multiplexer mult4 = Multiplexer(mult4A, mult4B, mult4C, mult4IO);
 
 //mult1
-PushButton bh = PushButton(mult1IO);
-PushButton bl = PushButton(mult1IO);
-RotaryEncoder enc = RotaryEncoder(mult1IO, mult1IO);
+PushButton b1 = PushButton(mult1IO);
+PushButton b2 = PushButton(mult1IO);
+PushButton b3 = PushButton(mult1IO);
+PushButton b4 = PushButton(mult1IO);
+PushButton b5 = PushButton(mult1IO);
+PushButton b6 = PushButton(mult1IO);
+PushButton b7 = PushButton(mult1IO);
+PushButton b8 = PushButton(mult1IO);
+
+//mult2
+RotaryEncoder enc = RotaryEncoder(mult2IO, mult2IO);
 RotaryEncoderPinA enc_1 = RotaryEncoderPinA(&enc);
 RotaryEncoderPinB enc_2 = RotaryEncoderPinB(&enc);
-PushButton benc_1 = PushButton(mult1IO);
-PushButton sw1 = PushButton(mult1IO);
-PushButton sw2 = PushButton(mult1IO);
-PushButton sw3 = PushButton(mult1IO);
-//mult2
-Pot p1 = Pot(mult2IO);
-Pot p2 = Pot(mult2IO);
-Pot p3 = Pot(mult2IO);
-//mult3
+PushButton benc_1 = PushButton(mult2IO);
 
-PushButton ba = PushButton(mult3IO);
-PushButton bb = PushButton(mult3IO);
-PushButton bc = PushButton(mult3IO);
-PushButton bd = PushButton(mult3IO);
-RotaryEncoder enc2 = RotaryEncoder(mult3IO, mult3IO);
+RotaryEncoder enc2 = RotaryEncoder(mult2IO, mult2IO);
 RotaryEncoderPinA enc2_1 = RotaryEncoderPinA(&enc2);
 RotaryEncoderPinB enc2_2 = RotaryEncoderPinB(&enc2);
-PushButton benc_2 = PushButton(mult3IO);
-
-//mult4
-PushButton b1 = PushButton(mult4IO);
-PushButton b2 = PushButton(mult4IO);
-PushButton b3 = PushButton(mult4IO);
-PushButton b4 = PushButton(mult4IO);
-PushButton b5 = PushButton(mult4IO);
-PushButton b6 = PushButton(mult4IO);
-PushButton b7 = PushButton(mult4IO);
-PushButton b8 = PushButton(mult4IO);
+PushButton benc_2 = PushButton(mult2IO);
 
 void update_multiplex(Multiplexer *mult){
   mult->update();
@@ -112,71 +93,74 @@ void update_multiplex(Multiplexer *mult){
         Serial.print(" : ");
         Serial.println(v);
         #if USE_MIDIUSB == 1
-        process_midi_out(mult->pins[i], 40 + i, v);
+        process_midi_out(mult->pins[i], i + 5* mult->pin_IO, v);
         #endif
       }
     }
   }
 }
+void update_element(Pot *p){
+  p->read_value();
+  if(p->changed){
+    Serial.print("p\t");
+    int v = p->get_value();
+    Serial.println(v);
+    #if USE_MIDIUSB == 1
+    process_midi_out(p, 10 + p->pin, v);
+    #endif
+  }
 
+}
 
 void setup()
 {
-
+  digitalWrite(mult1IO, HIGH);
+  digitalWrite(mult2IO, HIGH);
   #if USE_MIDIUSB == 1
   setup_midi();
   #endif
-
   mult1.setup_pullup();
 
-  mult1.assign_pin(0, &bh);
-  mult1.assign_pin(1, &enc_1);
-  mult1.assign_pin(2, &enc_2);
-  mult1.assign_pin(3, &bl);
-  mult1.assign_pin(4, &benc_1);
-  mult1.assign_pin(5, &sw1);
-  mult1.assign_pin(6, &sw2);
-  mult1.assign_pin(7, &sw3);
-
+  mult1.assign_pin(0, &b1);
+  mult1.assign_pin(1, &b2);
+  mult1.assign_pin(2, &b3);
+  mult1.assign_pin(3, &b4);
+  mult1.assign_pin(4, &b5);
+  mult1.assign_pin(5, &b6);
+  mult1.assign_pin(6, &b7);
+  mult1.assign_pin(7, &b8);
+  
 
   mult2.setup();
 
-  mult2.assign_pin(0, &p1);
-  mult2.assign_pin(1, &p2);
-  mult2.assign_pin(2, &p3);
+  mult2.assign_pin(5, &enc_1);
+  mult2.assign_pin(7, &enc_2);
+  mult2.assign_pin(6, &benc_1);
 
 
-  mult3.setup_pullup();
-
-  mult3.assign_pin(0, &ba);
-  mult3.assign_pin(1, &bb);
-  mult3.assign_pin(2, &bc);
-  mult3.assign_pin(3, &bd);
-  mult3.assign_pin(4, &benc_2);
-  mult3.assign_pin(6, &enc2_1);
-  mult3.assign_pin(7, &enc2_2);
+  mult2.assign_pin(0, &enc2_1);
+  mult2.assign_pin(3, &enc2_2);
+  mult2.assign_pin(1, &benc_2);
 
 
-  mult4.setup_pullup();
 
-  mult4.assign_pin(0, &b1);
-  mult4.assign_pin(1, &b2);
-  mult4.assign_pin(2, &b3);
-  mult4.assign_pin(3, &b4);
-  mult4.assign_pin(4, &b5);
-  mult4.assign_pin(5, &b6);
-  mult4.assign_pin(6, &b7);
-  mult4.assign_pin(7, &b8);
+  p1.setup();
+  p2.setup();
+  p3.setup();
+
 
   Serial.begin(9600);
 }
 
 void loop()
 {
-  // update_multiplex(&mult1);
+  update_multiplex(&mult1);
   update_multiplex(&mult2);
-  update_multiplex(&mult3);
-  update_multiplex(&mult4);
+
+  update_element(&p1);
+  update_element(&p2);
+  update_element(&p3);
+
   #if USE_MIDIUSB == 1
   loop_midi();
   #endif

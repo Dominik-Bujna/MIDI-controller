@@ -27,6 +27,22 @@ void Multiplexer::update()
         }
     }
 }
+
+void Multiplexer::cycle(){
+    for (int i = 0b000; i <= 0b111; i++)
+    {
+        digitalWrite(pin_A, (i & 1 << 0));
+        digitalWrite(pin_B, (i & 1 << 1));
+        digitalWrite(pin_C, (i & 1 << 2));
+        digitalWrite(pin_IO, HIGH);
+        Serial.print(pin_IO);
+        Serial.print('\t');
+        Serial.println(i);
+        delay(1000);
+        digitalWrite(pin_IO, LOW);
+    }
+}
+
 void Multiplexer::setup()
 {
     pinMode(pin_A, OUTPUT);
@@ -40,6 +56,14 @@ void Multiplexer::setup_pullup()
     pinMode(pin_B, OUTPUT);
     pinMode(pin_C, OUTPUT);
     pinMode(pin_IO, INPUT_PULLUP);
+}
+
+void Multiplexer::setup_output()
+{
+    pinMode(pin_A, OUTPUT);
+    pinMode(pin_B, OUTPUT);
+    pinMode(pin_C, OUTPUT);
+    pinMode(pin_IO, OUTPUT);
 }
 
 void Multiplexer::assign_pin(int pin_n, ControlElement *pin)

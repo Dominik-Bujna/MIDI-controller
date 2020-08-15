@@ -95,6 +95,7 @@ void update_multiplex(Multiplexer *mult){
         #if USE_MIDIUSB == 1
         process_midi_out(mult->pins[i], i + 5* mult->pin_IO, v);
         #endif
+        mult->pins[i]->changed = false;
       }
     }
   }
@@ -107,6 +108,7 @@ void update_element(Pot *p){
     Serial.println(v);
     #if USE_MIDIUSB == 1
     process_midi_out(p, 10 + p->pin, v);
+    p->changed = false;
     #endif
   }
 

@@ -21,7 +21,7 @@ void Pot::read_value()
         if (!changed)
         {
             int time = millis();
-            if (time - last_updated > cooldown)
+            // if (time - last_updated > cooldown)
             {
                 if (abs(last_state - state) > tolerance)
                 {
@@ -41,7 +41,6 @@ int Pot::get_value()
 void Pot::setup()
 {
     pinMode(pin, INPUT);
-    // analogWrite(pin, 0);
 }
 
 bool Pot::is_pot(){

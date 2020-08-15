@@ -35,7 +35,7 @@ void PushButton::read_value()
         if (!changed)
         {
             int time = millis();
-            if (time - last_pressed > cooldown)
+            // if (time - last_pressed > cooldown)
             {
                 last_state = state;
                 //this flag is set back after the change of the button has been sent

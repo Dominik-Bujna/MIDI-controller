@@ -1,3 +1,4 @@
+#pragma once
 #include <Arduino.h>
 #include <control_element.hpp>
 class Multiplexer
@@ -17,5 +18,7 @@ public:
     void update();
     void setup();
     void setup_pullup();
+    void setup_output();
+    void cycle();
     void assign_pin(int pin_n, ControlElement * pin);
 };

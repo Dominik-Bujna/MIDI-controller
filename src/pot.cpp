@@ -7,6 +7,7 @@ Pot::Pot(int pin_n)
     changed = false;
     tolerance = 8;
     cooldown = 10;
+    led_pin = -1;
 }
 
 Pot::~Pot()
@@ -21,7 +22,7 @@ void Pot::read_value()
         if (!changed)
         {
             int time = millis();
-            if (time - last_updated > cooldown)
+            // if (time - last_updated > cooldown)
             {
                 if (abs(last_state - state) > tolerance)
                 {
@@ -34,16 +35,18 @@ void Pot::read_value()
         }
     }
 }
+
 int Pot::get_value()
 {
     return map(last_state, 0, 1023, 0, 127);
 }
+
 void Pot::setup()
 {
     pinMode(pin, INPUT);
-    // analogWrite(pin, 0);
 }
 
-bool Pot::is_pot(){
+bool Pot::is_pot()
+{
     return true;
 }

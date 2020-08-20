@@ -6,27 +6,21 @@ RotaryEncoder::RotaryEncoder(int pin1, int pin2)
   pin_2 = pin2;
   last_state = 0;
   position = 0;
+  step_size = 1;
+  value = 0;
   scroll_multiplier = 1;
+  led_pin = -1;
 }
 RotaryEncoder::~RotaryEncoder() {}
 
 void RotaryEncoder::read_value()
 {
-  // int state_1 = digitalRead(pin_1);
-  // if (state_1 != last_state) {
-  //   if (digitalRead(pin_2) != state_1) {
-  //     position--;
-  //   } else {
-  //     position++;
-  //   }
-  // }
-  // last_state = state_1;
   read_1();
   read_2();
 }
 int RotaryEncoder::get_value()
 {
-  return (unsigned int) position % 128;
+  return value;
 }
 
 void RotaryEncoder::setup()
@@ -56,6 +50,12 @@ void RotaryEncoder::read_2()
     else
     {
       position++;
+    }
+    int new_value = (int)((double)position * step_size) % num_values;
+    if(new_value != value){
+      value = new_value;
+    }else{
+      changed = false;
     }
   }
 }

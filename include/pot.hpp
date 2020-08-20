@@ -9,11 +9,11 @@ public:
     virtual int get_value();
     virtual void setup();
     virtual bool is_pot();
+    int pin;
 
 private:
     int last_updated;
     int cooldown;
     int tolerance;
-    int pin;
     int last_state;
 };

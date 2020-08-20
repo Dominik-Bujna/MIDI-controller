@@ -2,9 +2,7 @@
 
 Multiplexer::Multiplexer()
 {
-    // for(int i = 0; i < pins_length; i++){
-    //     pin_addresses[i] = -1;
-    // }
+
 }
 Multiplexer::Multiplexer(int pinA, int pinB, int pinC, int pinIO)
 {

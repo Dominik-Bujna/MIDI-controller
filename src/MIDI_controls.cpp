@@ -1,113 +1,142 @@
 #if USE_MIDIUSB == 1
 #include <MIDI_controls.hpp>
-#include <FastLED.h>
 
 USBMIDI_CREATE_DEFAULT_INSTANCE();
+#define LED_PIN 13
 
-#define LED_PIN     13
-
-#define NUM_LEDS    5
-#define BRIGHTNESS  20
-#define LED_TYPE    WS2812
+#define NUM_LEDS 5
+#define BRIGHTNESS 20
+#define LED_TYPE WS2812
 #define COLOR_ORDER GRB
 CRGB leds[NUM_LEDS];
 
-#define UPDATES_PER_SECOND 100
+#define UPDATES_PER_SECOND 30
 
+int n_midi = 0;
+int leds_midi[NUM_LEDS];
+CRGB led_colors[NUM_LEDS];
+
+void set_default_colors()
+{
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+        led_colors[i] = CRGB::DeepPink;
+    }
+}
+void set_midi(ControlElement *c)
+{
+    if (!c->isModifier)
+    {
+        c->midi_address = n_midi++;
+        if (c->led_pin != -1)
+        {
+            leds_midi[c->led_pin] = c->midi_address;
+            Serial.print("MIDI ADDRESS SET: ");
+            Serial.print(c->midi_address);
+            Serial.print("To led_pin");
+            Serial.print(c->led_pin);
+            Serial.print("\t");
+            Serial.println(leds_midi[c->led_pin]);
+            // NoteToLed[multi->pins[i]->midi_address] = multi->pins[i]->led_pin;
+        }
+    }
+}
+
+void set_midi_mult(Multiplexer *multi)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (multi->pins[i] != NULL)
+        {
+            ControlElement *c = multi->pins[i];
+            set_midi(c);
+        }
+    }
+}
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
+    for(int i = 0; i < NUM_LEDS; i++){
+    Serial.print(leds_midi[i]);
+    Serial.print('\t');
+    }
+    Serial.println();
+    // delay(500);
     // Do whatever you want when a note is pressed.
+    Serial.print("MIDI IN ON ");
+    Serial.print(pitch);
+    Serial.print(" : ");
+    Serial.println(velocity);
 
-    if(channel == 5 && pitch == 62){
-        leds[4] = CRGB::Blue;
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+        if (leds_midi[i] == pitch)
+        {
+            leds[i] = led_colors[i];
+        }
     }
-    // if(channel == 5 && pitch == 63){
-    if(channel == MY_MIDI_CH && pitch == 41){
-        leds[3] = CRGB::BlueViolet;
-    }
-    // if(channel == 5 && pitch == 64){
-    if(channel == 5 && pitch == 60){
-        leds[2] = CRGB::Violet;
-    }
-    // if(channel == 5 && pitch == 66){    
-    if(channel == 5 && pitch == 61){
-        leds[1] = CRGB::MediumVioletRed;
-    }
-    // if(channel == 5 && pitch == 67){
-    if(channel == 5 && pitch == 65){
-        leds[0] = CRGB::Red;
-    }
-    // Try to keep your callbacks short (no delays ect)
-    // otherwise it would slow down the loop() and have a bad impact
-    // on real-time performance.
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
 {
+    Serial.print("MIDI IN OFF ");
+    Serial.print(pitch);
+    Serial.print(" : ");
+    Serial.println(velocity);
     // Do something when the note is released.
     // Note that NoteOn messages with 0 velocity are interpreted as NoteOffs.
-    if(channel == MY_MIDI_CH && pitch == 62){
-        leds[4] = CRGB::Black;
-    }
-    // if(channel == MY_MIDI_CH && pitch == 63){
-    if(channel == MY_MIDI_CH && pitch == 41){
-        leds[3] = CRGB::Black;
-    }
-    // if(channel == MY_MIDI_CH && pitch == 64){
-    if(channel == MY_MIDI_CH && pitch == 60){
-        leds[2] = CRGB::Black;
-    }
-    // if(channel == MY_MIDI_CH && pitch == 66){  
-    if(channel == MY_MIDI_CH && pitch == 61){
-        leds[1] = CRGB::Black;
-    }
-    // if(channel == MY_MIDI_CH && pitch == 67){
-    if(channel == MY_MIDI_CH && pitch == 65){
-        leds[0] = CRGB::Black;
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+        if (leds_midi[i] == pitch)
+        {
+            leds[i] = CRGB::Black;
+        }
     }
 }
 
-
-
-
 void setup_midi()
 {
-   MIDI.begin(MIDI_CHANNEL_OMNI);
-  MIDI.setHandleNoteOn(handleNoteOn);
-  MIDI.setHandleNoteOff(handleNoteOff);
-    
-  FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
-  FastLED.setBrightness(  BRIGHTNESS );
-  leds[0] = CRGB::Green;
-  leds[1] = CRGB::Yellow;
-  leds[2] = CRGB::Red;
-  leds[3] = CRGB::Yellow;
-  leds[4] = CRGB::Green;
+    MIDI.begin(MIDI_CHANNEL_OMNI);
+    MIDI.setHandleNoteOn(handleNoteOn);
+    MIDI.setHandleNoteOff(handleNoteOff);
+    set_default_colors();
+    FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.setBrightness(BRIGHTNESS);
+      leds[0] = CRGB::Green;
+      leds[1] = CRGB::Yellow;
+      leds[2] = CRGB::Red;
+      leds[3] = CRGB::Yellow;
+      leds[4] = CRGB::Green;
 }
 void loop_midi()
 {
     // Read incoming messages
+
+    // leds_midi[0]=6;
     MIDI.read();
     FastLED.show();
 }
 
-void send_button_press(int note, int velocity){
+void send_button_press(int note, int velocity)
+{
     MIDI.sendNoteOn(note, velocity, MY_MIDI_CH);
 }
-void send_button_toggle(){
-
+void send_button_toggle()
+{
 }
 
-void send_state_change(){
-
+void send_state_change()
+{
 }
-void process_midi_out(ControlElement * e, int note, int value){
-    if(e->is_button()){
+void process_midi_out(ControlElement *e, int note, int value)
+{
+    if (e->is_button())
+    {
         MIDI.sendNoteOn(note, e->get_value(), MY_MIDI_CH);
         e->changed = false;
     }
-    if(e->is_encoder() || e->is_pot()){
+    if (e->is_encoder() || e->is_pot())
+    {
         MIDI.sendControlChange(note, e->get_value(), MY_MIDI_CH);
         e->changed = false;
     }

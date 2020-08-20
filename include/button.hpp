@@ -6,7 +6,7 @@ class PushButton : public ControlElement
 
 public:
     PushButton(int pin_n);
-    PushButton(int pin_n, int cooldown_ms);
+    PushButton(int pin_n, int led);
     ~PushButton();
     virtual void read_value();
     virtual int get_value();

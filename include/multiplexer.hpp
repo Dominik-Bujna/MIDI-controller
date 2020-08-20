@@ -1,3 +1,4 @@
+#pragma once
 #include <Arduino.h>
 #include <control_element.hpp>
 class Multiplexer

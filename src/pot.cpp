@@ -7,6 +7,7 @@ Pot::Pot(int pin_n)
     changed = false;
     tolerance = 8;
     cooldown = 10;
+    led_pin = -1;
 }
 
 Pot::~Pot()
@@ -34,15 +35,18 @@ void Pot::read_value()
         }
     }
 }
+
 int Pot::get_value()
 {
     return map(last_state, 0, 1023, 0, 127);
 }
+
 void Pot::setup()
 {
     pinMode(pin, INPUT);
 }
 
-bool Pot::is_pot(){
+bool Pot::is_pot()
+{
     return true;
 }

@@ -7,15 +7,18 @@ PushButton::PushButton(int pin_n)
     last_pressed = 0;
     last_state = 1;
     changed = 0;
+    led_pin = -1;
+    midi_address = -1;
 }
 
-PushButton::PushButton(int pin_n, int cooldown_ms)
+PushButton::PushButton(int pin_n,  int led)
 {
     pin = pin_n;
-    cooldown = cooldown_ms;
     last_pressed = 0;
     last_state = 1;
     changed = 0;
+    midi_address = -1;
+    led_pin = led;
 }
 PushButton::~PushButton(){};
 int PushButton::get_value()
@@ -35,7 +38,6 @@ void PushButton::read_value()
         if (!changed)
         {
             int time = millis();
-            // if (time - last_pressed > cooldown)
             {
                 last_state = state;
                 //this flag is set back after the change of the button has been sent

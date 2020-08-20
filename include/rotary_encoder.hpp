@@ -16,9 +16,12 @@ public:
     //pin 1 always has to preceed pin 2 when connected to multiplexer
     int pin_1;
     int pin_2;
+    double scroll_multiplier;
+    double step_size;
+    int num_values;
+    int value;
 
 private:
     int last_state;
     int position;
-    int scroll_multiplier;
 };
